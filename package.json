@@ -4,8 +4,10 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "start": "nodemon index.js"
+    "start": "nodemon index.js",
+    "tw": "npx tailwindcss -i ./assets/tailwind.css -o ./public/output.css --watch"
   },
+
   "keywords": [],
   "author": "",
   "license": "ISC",
