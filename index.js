@@ -15,6 +15,12 @@ let bodyParser = require("body-parser");
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
+//Set EJS as the view engine
+app.set('view engine', 'ejs');
+
+//specify the location of the of the view folder
+app.set('views', './views')
+
 app.use(
     session({
         secret: 'my-secret',
@@ -42,7 +48,16 @@ app.listen(port, () => {
 });
 
 app.get("/", (req, res) => {
-    res.sendFile(__dirname + "/views/index.html");
+    const data = {
+        title: "Welcome",
+        style: "color: lightpink",
+        // href: "./views/html/login.html"
+        href: "/login"
+    }
+    //filen heter index
+    res.render('index', data);
+
+    // res.sendFile(__dirname + "/views/html/index.html");
 });
 
 app.get('/api/getuser', (req, res) => {
@@ -51,15 +66,23 @@ app.get('/api/getuser', (req, res) => {
 
 app.get('/logged-in', (req, res) =>{
     if(req.session.authenticated){
-        res.sendFile(__dirname + "/views/logged-in.html");
-        }else{
+        // res.sendFile(__dirname + "/views/html/logged-in.html");
+        const data = {
+            name: 'Anna',
+            style: 'color: peachpuff'
+        }
+
+        res.render('logged-in', data)
+        }
+        
+        else{
             res.redirect('/login');
         }
 })
 
 app.get("/login", (req, res) => {
     console.log(req.body);
-    res.sendFile(__dirname + "/views/login.html");
+    res.sendFile(__dirname + "/views/html/login.html");
 });
 
 //i package.json under scripts skriver vi bara olika kommandon som förenklar för oss. T ex "start": "nodemon index.js" gör att vi använder vår dependency nodemon som uppdaterar vår kod hela tiden utan att vi behöver cancel och run igen. Man kan även använda det om man t ex vill kompilera flera ccs filer osv.
