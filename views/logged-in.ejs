@@ -1,31 +1,26 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
-</head>
-<body>
+
+<%- include('partials/head')%>
+
     <h2>HEJ <span style="<%= style %>"><%= name %></span> DU ÄR INLOGGAD</h2>
 
-    <p>HEjej du är jaguaoklegmanjamdnand</p>
-
     <!-- <button onclick="getUserName()">Hämta användarnamn</button> -->
-    <button onclick="getUserName()">Hämta namn</button>
+    <!-- <button onclick="getUserName()">Hämta namn</button> -->
+    <button class="mt-8 bg-pink-500 text-white px-4 py-3 text-xl" onclick="getColor()">Hämta favoritfärg</button>
 
 
     <script>
-        function getUserName(){
-            fetch('http://localhost:3000/api/getuser')
+        function getColor(){
+            fetch('http://localhost:3000/api/getFavoriteColor')
             .then(data => {
+                console.log(typeof data)
                 return data.json();
             })
             .then(json => {
                 console.log(json);
-            });
+    
+            })
+            
         }
     </script>
 
-</body>
-</html>
+<%- include('partials/footer');%>

@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+<!-- <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -12,4 +12,24 @@
     <h1 style ="<%= style %>"><%= title%></h1>
     <a href="<%=href %>">Logga in</a>
 </body>
-</html>
+</html> 
+
+flyttar all ovan kod och delar upp HTML i head och footer istället -->
+
+<%- include('partials/head');%>
+
+<div class="flex">
+
+</div>
+
+<h1 style ="<%= style %>"><%= title%></h1>
+
+<a href="<%=href %>">Logga in</a>
+
+<p class="color-pink-500">Hejhej nu testar jag tw</p>
+
+<p>New here?</p>
+
+<a class="mt-8 inline-block px-4 py-2 bg-pink-500 text-white" href="/signup">Sign up</a>
+
+<%- include('partials/footer');%>
