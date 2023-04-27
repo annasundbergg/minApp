@@ -1,6 +1,8 @@
 const express = require('express');
 const router = express.Router();
 const Post = require('./../models/posts');
+const slugify = require('slugify');
+
 
 // Get all posts
 router.get('/posts', async (req, res) => {
@@ -23,7 +25,8 @@ router.post('/posts', async (req, res) => {
   try{
     const title = req.body.title;
     const content = req.body.content;
-    const post = new Post({title, content});
+    const slug = slugify(title);
+    const post = new Post({title, slug, content});
     await post.create();
     console.log('post created')
     console.log(post); 
@@ -53,5 +56,9 @@ router.get('/posts/slug/:slug', async (req, res) => {
       });
   }
 })
+
+// DELETE
+
+
 
 module.exports = router;

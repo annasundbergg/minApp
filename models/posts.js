@@ -3,9 +3,10 @@ const db = require('./../db_connection');
 //static betyder att man inte kör på instans av klassen, har vi en funktion utan static måste det vara en instans av klassen
 class Post {
 
-    constructor({id, title, content }) {
+    constructor({id, title, content, slug }) {
         this.id = id;
         this.title = title;
+        this.slug = slug;
         this.content = content;
     }
 
@@ -45,13 +46,13 @@ class Post {
     })
     }
 
-    //skapar en create metod på vår klass Post
+    //skapar en create-metod på vår klass Post
     async create(){
         console.log('Post model create');
         console.log(this.title);
         console.log(this.content);
         const sql = `INSERT INTO posts (user_id, slug, title, content) VALUES (?, ?, ?, ?) `;
-        const values = [1, 'slug-slug-slug', this.title, this.content];
+        const values = [1, this.slug, this.title, this.content];
 
         var self = this;
         const result = await db.query(sql, values, 
