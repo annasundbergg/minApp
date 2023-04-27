@@ -1,6 +1,7 @@
 const express = require("express");
 const router = express.Router();
 const connection = require('../db_connection');
+const authMiddleware = require('./../middlewares/auth');
 require('dotenv').config();
 
 router.get("/", (req, res) => {
@@ -9,7 +10,7 @@ router.get("/", (req, res) => {
         style: "color: lightpink",
         // href: "./views/html/login.html"
         href: "/login",
-        favCol: favoriteColor
+        // favCol: favoriteColor
     }
     //filen heter index
     res.render('index', data);
@@ -19,7 +20,16 @@ router.get("/", (req, res) => {
 
 module.exports = router;
 
-router.get('/logged-in', (req, res) =>{
+router.get('/test', authMiddleware, (req, res) =>{ 
+    console.log(req.session)
+    if(req.isAuthenticated){
+        res.send('logged in'); 
+    }else{
+        res.send('not logged in')
+    }
+}); 
+
+router.get('/logged-in', authMiddleware, (req, res) =>{
     if(req.session.authenticated){
         const username = req.session.username;
         const favoriteColor = req.session.favorite_color;
@@ -39,6 +49,27 @@ router.get('/logged-in', (req, res) =>{
         }
 })
 
+// router.post("/logged-in", (req, res) => {
+//     console.log(req.session.id)
+
+//     const { content, title } = req.body;
+//     const slug = "hej";
+
+//     // Insert new post into MySQL database
+//     connection.query('INSERT INTO posts SET ?', user, (err, results) => {
+//         if (err) {
+//             console.error('Error creating new user: ', err);
+//             res.status(500).send('Error creating new user');
+//             return;
+//         }
+//         console.log('New user created with id: ', results.insertId);
+//         req.session.username = user.name;
+//         req.session.authenticated = true;
+//         res.redirect('/logged-in');
+//     });
+
+// })
+
 router.post("/login", (req, res) => {
     console.log(req.body);
     const email = req.body.email;
@@ -51,11 +82,13 @@ router.post("/login", (req, res) => {
 
             if (results.length > 0 ){
                 console.log(results[0].name);
+                console.log(results[0].id)
                 console.log(req.session);
                 //res.send(`Found ${results.length} user`);
                 req.session.username = results[0].name;
                 req.session.favorite_color = results[0].favorite_color;
                 req.session.authenticated = true;
+                req.session.id = results[0].id;
                 res.redirect('/logged-in');
             }
 
@@ -70,7 +103,7 @@ router.post("/login", (req, res) => {
 
 router.get("/login", (req, res) => {
     console.log(req.body);
-res.render('login'); 
+    res.render('login'); 
 
 });
 
@@ -78,7 +111,6 @@ res.render('login');
 router.get('/signup', (req, res) => {
     res.render('signup')
 })
-
 
 // Route for creating a new user
 router.post('/users', (req, res) => {
@@ -104,3 +136,16 @@ router.get("/second", (req, res) => {
     res.send("Hello Second World!");
 });
 
+
+router.get('/logout', (req, res) => {
+    if(req.session.authenticated && req.session.username){
+        req.session.authenticated = false;
+        req.session.username = null;
+        res.redirect('/');
+
+    }
+        
+    else{
+        res.redirect('/login');
+    }
+})

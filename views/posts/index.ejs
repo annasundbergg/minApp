@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="output.css">
+    <title>Document</title>
+</head>
+<body class="bg-gray-100 p-5 md:p-20">
+
+<header class="bg-slate-600 w-full text-white p-10">MY HEADER</header>
+
+<% posts.forEach(post => { %>
+    <div class="mt-10 container-sm">
+
+        <!-- <p class="font-semibold"><%= post.title %></p> -->
+        
+        <a href="/posts/slug/<%= post.slug %>">
+            <h2 class="text-xl font-bold"><%= post.title %></h2>
+        </a>
+
+        <p class="font-light text-xs"> <%= moment(post.created_at).fromNow()%> </p>
+
+        <p><%= post.content %></p>
+    </div>
+ <% }); %>
+
+
+<%- include('./../partials/footer');%>
